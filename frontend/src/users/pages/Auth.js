@@ -17,6 +17,8 @@ import {
 } from "../../shared/util/validators";
 
 import Card from "../../shared/UIElement/Card";
+import Container from "../../shared/UIElement/Container/Container";
+import Art from "../../shared/UIElement/Art/Art";
 const Auth = (props) => {
   const auth = useContext(AuthContext);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -80,7 +82,7 @@ const Auth = (props) => {
         const responseData = await sendRequest(
           "http://localhost:5000/api/users/signup",
           "POST",
-          formData 
+          formData
         );
         auth.login(responseData.id);
       } catch (err) {}
@@ -90,48 +92,56 @@ const Auth = (props) => {
   return (
     <>
       <ErrorModal error={error} onClear={clearErrorHandler} />
-      <Card className="authentication">
-        {isLoading && <LoadingSpinner asOverlay />}
-        <h2 className="authenticaton__header">Authentication Required</h2>
-        <hr />
-        <form onSubmit={authSubmitHandler}>
-          {!isLoggedIn && (
-            <Input
-              id="name"
-              label="Name"
-              element="input"
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="please enter a valid name format"
-              onInput={inputHandler}
-            />
-          )}
-          <Input
-            id="email"
-            label="Email"
-            element="input"
-            validators={[VALIDATOR_EMAIL()]}
-            errorText="please enter a valid email format"
-            onInput={inputHandler}
-          />
-          <Input
-            id="password"
-            element="input"
-            label="Password"
-            validators={[VALIDATOR_MINLENGTH(8), VALIDATOR_MAXLENGTH(16)]}
-            errorText="this password is not valid"
-            onInput={inputHandler}
-          />
-          {!isLoggedIn && (
-            <ImageUpload center id="image" onInput={inputHandler} />
-          )}
-          <Button disabled={!formState.isValid}>
-            {isLoggedIn ? "LOGIN" : "SIGNUP"}
-          </Button>
-        </form>
-        <Button inverse onClick={switchModeHandler}>
-          {isLoggedIn ? "SIGNUP" : "LOGIN"}
-        </Button>
-      </Card>
+      <Container>
+        <div className="art-container">
+          <Art />
+        </div>
+        <div className="form-container">
+          <Card className="authentication">
+            {isLoading && <LoadingSpinner asOverlay />}
+            <h2 className="authenticaton__header">Authentication Required</h2>
+            <hr />
+            <form onSubmit={authSubmitHandler}>
+              {!isLoggedIn && (
+                <Input
+                  id="name"
+                  label="Name"
+                  element="input"
+                  validators={[VALIDATOR_REQUIRE()]}
+                  errorText="please enter a valid name format"
+                  onInput={inputHandler}
+                />
+              )}
+              <Input
+                id="email"
+                label="Email"
+                element="input"
+                validators={[VALIDATOR_EMAIL()]}
+                errorText="please enter a valid email format"
+                onInput={inputHandler}
+              />
+              <Input
+                id="password"
+                element="input"
+                type="password"
+                label="Password"
+                validators={[VALIDATOR_MINLENGTH(8), VALIDATOR_MAXLENGTH(16)]}
+                errorText="this password is not valid"
+                onInput={inputHandler}
+              />
+              {!isLoggedIn && (
+                <ImageUpload center id="image" onInput={inputHandler} />
+              )}
+              <Button disabled={!formState.isValid}>
+                {isLoggedIn ? "LOGIN" : "SIGNUP"}
+              </Button>
+            </form>
+            <Button inverse onClick={switchModeHandler}>
+              {isLoggedIn ? "SIGNUP" : "LOGIN"}
+            </Button>
+          </Card>
+        </div>
+      </Container>
     </>
   );
 };
